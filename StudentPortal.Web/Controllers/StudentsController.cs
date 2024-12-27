@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentPortal.Web.Data;
 using StudentPortal.Web.Models;
@@ -38,6 +39,7 @@ namespace StudentPortal.Web.Controllers
             return View();
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> List()
         {
@@ -46,6 +48,7 @@ namespace StudentPortal.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var student = await dbContext.Students.FindAsync(id);
@@ -54,6 +57,7 @@ namespace StudentPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Student viewmodel)
         {
             var student = await dbContext.Students.FindAsync(viewmodel.Id);
@@ -70,6 +74,7 @@ namespace StudentPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Student viewmodel)
         {
             var student = await dbContext.Students.AsNoTracking().FirstOrDefaultAsync(x=>x.Id == viewmodel.Id);

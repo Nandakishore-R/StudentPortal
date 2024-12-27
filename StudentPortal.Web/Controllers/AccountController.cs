@@ -32,7 +32,7 @@ namespace StudentPortal.Web.Controllers
                 Debug.WriteLine($"Email: {model.Email}");
                 if (result.Succeeded)
                 {
-                    Debug.WriteLine("Success");
+                    await userManager.AddToRoleAsync(user, "User");
                     await signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("List", "Students"); // Redirect after successful registration
                 }
@@ -66,7 +66,16 @@ namespace StudentPortal.Web.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("List", "Students");
+                    var user = await userManager.FindByEmailAsync(model.Email);
+
+                    if (await userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction("AdminDashboard", "Dashboard");
+                    }
+                    else if (await userManager.IsInRoleAsync(user, "User"))
+                    {
+                        return RedirectToAction("UserDashboard", "Dashboard");
+                    }
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
