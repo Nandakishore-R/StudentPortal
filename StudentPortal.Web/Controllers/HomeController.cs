@@ -1,11 +1,14 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 using StudentPortal.Web.Models;
 
 namespace StudentPortal.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private static readonly NLog.ILogger nLogLogger = LogManager.GetCurrentClassLogger();
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -15,6 +18,7 @@ namespace StudentPortal.Web.Controllers
 
         public IActionResult Index()
         {
+            nLogLogger.Info("Index page accessed.");
             return View();
         }
 
